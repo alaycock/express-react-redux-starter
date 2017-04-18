@@ -5,7 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var isProduction = process.env.NODE_ENV === 'production';
 var cssOutputPath = isProduction ? '/styles/app.[hash].css' : '/styles/app.css';
-var jsOutputPath = isProduction ? '/scripts/app.[hash].js' : '/scripts/app.js';
+var jsOutputPath = isProduction ? 'scripts/app.[hash].js' : 'scripts/app.js';
 var ExtractSASS = new ExtractTextPlugin(cssOutputPath);
 var port = isProduction ? process.env.PORT || 8080 : process.env.PORT || 3000;
 
@@ -14,7 +14,7 @@ var port = isProduction ? process.env.PORT || 8080 : process.env.PORT || 3000;
 // ------------------------------------------
 var webpackConfig = {
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new Webpack.DefinePlugin({
@@ -30,7 +30,7 @@ var webpackConfig = {
     loaders: [{
       test: /.jsx?$/,
       include: Path.join(__dirname, './src/app'),
-      loader: 'babel',
+      loader: 'babel-loader',
     }],
   },
 };
@@ -38,11 +38,7 @@ var webpackConfig = {
 // ------------------------------------------
 // Entry points
 // ------------------------------------------
-webpackConfig.entry = !isProduction
-  ? ['webpack-dev-server/client?http://localhost:' + port,
-     'webpack/hot/dev-server',
-     Path.join(__dirname, './src/app/index')]
-  : [Path.join(__dirname, './src/app/index')];
+webpackConfig.entry = [Path.join(__dirname, './src/app/index')];
 
 // ------------------------------------------
 // Bundle output
@@ -67,7 +63,7 @@ isProduction
     })
   : webpackConfig.module.loaders.push({
       test: /\.scss$/,
-      loaders: ['style', 'css', 'sass'],
+      loaders: ['style-loader', 'css-loader', 'sass-loader'],
     });
 
 // ------------------------------------------
@@ -96,7 +92,6 @@ if (!isProduction) {
     hot: true,
     port: port,
     inline: true,
-    progress: true,
     historyApiFallback: true,
   };
 }
