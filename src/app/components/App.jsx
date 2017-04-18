@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './common/Header';
 
 function App({ children }) {
@@ -10,6 +11,6 @@ function App({ children }) {
   );
 }
 
-App.propTypes = { children: PropTypes.object };
+App.propTypes = { children: PropTypes.array };
 
 export default App;
